@@ -10,6 +10,7 @@ use Engelsystem\Http\UrlGeneratorInterface;
 use Engelsystem\Models\User\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Jumbojett\OpenIDConnectClient;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AuthController extends BaseController
