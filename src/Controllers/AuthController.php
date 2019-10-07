@@ -116,9 +116,10 @@ class AuthController extends BaseController
 
     public function startoidc() : Response
     {
-        $oidc = new OpenIDConnectClient(config('oidc_url'),
-            config('oidc_client_id'),
-            config('oidc_client_secret'));
+        $url = config('oidc_url');
+        $id = config('oidc_client_id');
+        $secret = config('oidc_client_secret');
+        $oidc = new OpenIDConnectClient($url, $id, $secret);
         $oidc->authenticate();
         $name = $oidc->requestUserInfo('given_name');
         var_dump($name);
