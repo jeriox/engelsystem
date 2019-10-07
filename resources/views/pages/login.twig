@@ -72,7 +72,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6 text-center">
+            <div class="col-sm-4 text-center">
                 <h2>{{ __('Register') }}</h2>
                 {% if has_permission_to('register') and config('registration_enabled') %}
                     <p>{{ __('Please sign up, if you want to help us!') }}</p>
@@ -84,7 +84,15 @@
                 {% endif %}
             </div>
 
-            <div class="col-sm-6 text-center">
+            <div class="col-sm-4 text-center">
+                <h2>{{ __('OpenID') }}</h2>
+                    <p>{{ __('Log in with your OpenID') }}</p>
+                    <div class="form-group">
+                        <a href="{{ url('oidc-start') }}" class="btn btn-default">{{ __('Authenticate') }} &raquo;</a>
+                    </div>
+            </div>
+
+            <div class="col-sm-4 text-center">
                 <h2>{{ __('What can I do?') }}</h2>
                 <p>{{ __('Please read about the jobs you can do to help us.') }}</p>
                 <div class="form-group">

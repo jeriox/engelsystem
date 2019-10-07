@@ -112,4 +112,14 @@ class AuthController extends BaseController
 
         return $this->response->redirectTo($this->url->to('/'));
     }
+
+    public function startoidc() : Response
+    {
+        $oidc = new OpenIDConnectClient(config('oidc_url'),
+            config('oidc_client_id'),
+            config('oidc_client_secret'));
+        $oidc->authenticate();
+        $name = $oidc->requestUserInfo('given_name');
+        var_dump($name);
+    }
 }

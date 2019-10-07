@@ -12,6 +12,7 @@ $route->get('/credits', 'CreditsController@index');
 $route->get('/login', 'AuthController@login');
 $route->post('/login', 'AuthController@postLogin');
 $route->get('/logout', 'AuthController@logout');
+$route->get('/oidc-start', 'AuthController@startoidc');
 
 // Stats
 $route->get('/metrics', 'Metrics\\Controller@metrics');

@@ -38,7 +38,8 @@
         "symfony/psr-http-message-bridge": "^1.2",
         "twig/extensions": "^1.5",
         "twig/twig": "~2.6.0",
-        "vlucas/phpdotenv": "^3.3"
+        "vlucas/phpdotenv": "^3.3",
+        "jumbojett/openid-connect-php": "^0.8.0"
     },
     "require-dev": {
         "dms/phpunit-arraysubset-asserts": "^0.1.0",
