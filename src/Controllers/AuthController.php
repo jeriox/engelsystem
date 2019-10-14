@@ -11,6 +11,7 @@ use Engelsystem\Models\User\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Jumbojett\OpenIDConnectClient;
+use Jumbojett\OpenIDConnectClientException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AuthController extends BaseController
@@ -120,7 +121,11 @@ class AuthController extends BaseController
         $id = config('oidc_client_id');
         $secret = config('oidc_client_secret');
         $oidc = new OpenIDConnectClient($url, $id, $secret);
-        $oidc->authenticate();
+        try {
+            $oidc->authenticate();
+        } catch (OpenIDConnectClientException $e) {
+            var_dump($e);
+        }
         $name = $oidc->requestUserInfo('given_name');
         var_dump($name);
     }
