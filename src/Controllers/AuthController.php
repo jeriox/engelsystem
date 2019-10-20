@@ -126,6 +126,7 @@ class AuthController extends BaseController
         $id = config('oidc_client_id');
         $secret = config('oidc_client_secret');
         $oidc = new OpenIDConnectClient($url, $id, $secret);
+        $oidc->addScope(array('openid', 'email'));
         $oidc->providerConfigParam(['token_endpoint_auth_methods_supported' => []]);
         try {
             $oidc->authenticate();
