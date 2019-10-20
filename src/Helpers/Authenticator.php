@@ -20,7 +20,7 @@ class Authenticator
     protected $session;
 
     /** @var UserRepository */
-    protected $userRepository;
+    public $userRepository;
 
     /** @var string[] */
     protected $permissions;

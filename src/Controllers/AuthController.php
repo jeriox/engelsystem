@@ -3,10 +3,15 @@
 namespace Engelsystem\Controllers;
 
 use Carbon\Carbon;
+use Engelsystem\Database\Db;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Http\UrlGeneratorInterface;
+use Engelsystem\Models\User\Contact;
+use Engelsystem\Models\User\PersonalData;
+use Engelsystem\Models\User\Settings;
+use Engelsystem\Models\User\State;
 use Engelsystem\Models\User\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -121,12 +126,110 @@ class AuthController extends BaseController
         $id = config('oidc_client_id');
         $secret = config('oidc_client_secret');
         $oidc = new OpenIDConnectClient($url, $id, $secret);
+        $oidc->providerConfigParam(['token_endpoint_auth_methods_supported' => []]);
         try {
             $oidc->authenticate();
         } catch (OpenIDConnectClientException $e) {
-            var_dump($e);
+            return $this->response->redirectTo($this->url->to('/login'));
         }
-        $name = $oidc->requestUserInfo('given_name');
-        var_dump($name);
+
+        $user = $this->auth->userRepository->whereName($oidc->getVerifiedClaims('sub'))->first();
+        if ($user instanceof User) {
+            $this->session->invalidate();
+            $this->session->set('user_id', $user->id);
+            $this->session->set('locale', $user->settings->language);
+
+            $user->last_login_at = new Carbon();
+            $user->save(['touch' => false]);
+
+            return $this->response->redirectTo('news');
+        }
+        else {
+
+            $nick = $oidc->getVerifiedClaims('sub');
+            $mail = $oidc->getIdTokenPayload()->email;
+
+//            $selected_angel_types = [];
+//            foreach (array_keys($angel_types) as $angel_type_id) {
+//                if ($request->has('angel_types_' . $angel_type_id)) {
+//                    $selected_angel_types[] = $angel_type_id;
+//                }
+//            }
+
+                $user = new User([
+                    'name'          => $nick,
+                    'password'      => '',
+                    'email'         => $mail,
+                    'api_key'       => '',
+                    'last_login_at' => null,
+                ]);
+                $user->save();
+
+                $contact = new Contact([
+                    'dect'   => '',
+                    'mobile' => '',
+                ]);
+                $contact->user()
+                    ->associate($user)
+                    ->save();
+
+                $personalData = new PersonalData([
+                    'first_name'           => '',
+                    'last_name'            => '',
+                    'shirt_size'           => '',
+                    'planned_arrival_date' => null,
+                ]);
+                $personalData->user()
+                    ->associate($user)
+                    ->save();
+
+                $settings = new Settings([
+                    'language'        => 'de_DE',
+                    'theme'           => config('theme'),
+                    'email_human'     => true,
+                    'email_shiftinfo' => true,
+                ]);
+                $settings->user()
+                    ->associate($user)
+                    ->save();
+
+                $state = new State([]);
+                if (config('autoarrive')) {
+                    $state->arrived = true;
+                    $state->arrival_date = new Carbon();
+                }
+                $state->user()
+                    ->associate($user)
+                    ->save();
+
+                // Assign user-group and set password
+                DB::insert('INSERT INTO `UserGroups` (`uid`, `group_id`) VALUES (?, -20)', [$user->id]);
+
+//                // Assign angel-types
+//                $user_angel_types_info = [];
+//                foreach ($selected_angel_types as $selected_angel_type_id) {
+//                    DB::insert(
+//                        'INSERT INTO `UserAngelTypes` (`user_id`, `angeltype_id`, `supporter`) VALUES (?, ?, FALSE)',
+//                        [$user->id, $selected_angel_type_id]
+//                    );
+//                    $user_angel_types_info[] = $angel_types[$selected_angel_type_id];
+//                }
+
+                engelsystem_log(
+                    'User ' . User_Nick_render($user, true)
+                    . ' signed up'
+                );
+                success(__('Angel registration successful!'));
+
+
+                // If a welcome message is present, display registration success page.
+                if ($message = config()->get('welcome_msg')) {
+                    return User_registration_success_view($message);
+                }
+
+
+        }
+
+        return $this->response->redirectTo($this->url->to('/'));
     }
 }
