@@ -51,7 +51,7 @@ function update_ShiftsFilter_timerange(ShiftsFilter $shiftsFilter, $days)
     }
 
     $end_time = $shiftsFilter->getEndTime();
-    if ($end_time == null) {
+    if (is_null($end_time)) {
         $end_time = $start_time + 24 * 60 * 60;
     }
 
