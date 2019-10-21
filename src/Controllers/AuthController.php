@@ -65,11 +65,6 @@ class AuthController extends BaseController
         return $this->showLogin();
     }
 
-    protected function legacyLogin(): Response
-    {
-        return $this->showLegacyLogin();
-    }
-
     /**
      * @return Response
      */
@@ -80,17 +75,6 @@ class AuthController extends BaseController
 
         return $this->response->withView(
             'pages/login',
-            ['errors' => $errors]
-        );
-    }
-
-    protected function showLegacyLogin(): Response
-    {
-        $errors = Collection::make(Arr::flatten($this->session->get('errors', [])));
-        $this->session->remove('errors');
-
-        return $this->response->withView(
-            'pages/login-legacy',
             ['errors' => $errors]
         );
     }

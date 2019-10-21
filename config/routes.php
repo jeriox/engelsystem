@@ -10,8 +10,7 @@ $route->get('/credits', 'CreditsController@index');
 
 // Authentication
 $route->get('/login', 'AuthController@login');
-$route->get('/login-legacy', 'AuthController@legacyLogin');
-$route->post('/login', 'AuthController@legacyLogin');
+$route->post('/login', 'AuthController@login');
 $route->get('/logout', 'AuthController@logout');
 $route->get('/oidc-start', 'AuthController@startoidc');
 
