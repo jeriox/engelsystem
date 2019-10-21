@@ -45,13 +45,6 @@ class ShiftCalendarShiftRenderer
                 . 'px"',
                 [
                     $this->renderShiftHead($shift, $class),
-                    div('panel-body', [
-                        $info_text,
-                        Room_name_render([
-                            'RID'  => $shift['RID'],
-                            'Name' => $shift['room_name']
-                        ])
-                    ]),
                     $shifts_row,
                     div('shift-spacer')
                 ]
