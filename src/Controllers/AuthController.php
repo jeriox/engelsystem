@@ -135,17 +135,8 @@ class AuthController extends BaseController
         }
 
         $user = $this->auth->userRepository->whereName($oidc->getVerifiedClaims('sub'))->first();
-        if ($user instanceof User) {
-            $this->session->invalidate();
-            $this->session->set('user_id', $user->id);
-            $this->session->set('locale', $user->settings->language);
 
-            $user->last_login_at = new Carbon();
-            $user->save(['touch' => false]);
-
-            return $this->response->redirectTo('news');
-        }
-        else {
+        if (!$user instanceof User) {
 
             $nick = $oidc->getVerifiedClaims('sub');
             $mail = $oidc->getIdTokenPayload()->email;
@@ -231,6 +222,13 @@ class AuthController extends BaseController
 
         }
 
-        return $this->response->redirectTo($this->url->to('/'));
+        $this->session->invalidate();
+        $this->session->set('user_id', $user->id);
+        $this->session->set('locale', $user->settings->language);
+
+        $user->last_login_at = new Carbon();
+        $user->save(['touch' => false]);
+
+        return $this->response->redirectTo('/');
     }
 }

@@ -29,78 +29,15 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                <div class="panel panel-primary first">
-                    <div class="panel-body">
-                        {% for message in errors|default([]) %}
-                            {{ m.alert(__(message), 'danger') }}
-                        {% endfor %}
 
-                        <form action="" enctype="multipart/form-data" method="post">
-                            {{ csrf() }}
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon input-lg">{{ m.angel }}</span>
-                                    <input class="form-control input-lg" id="form_nick"
-                                           type="text" name="login" value="" placeholder="{{ __('Nick') }}">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon input-lg">{{ m.glyphicon('lock') }}</span>
-                                    <input class="form-control input-lg" id="form_password"
-                                          type="password" name="password" value="" placeholder="{{ __('Password') }}">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">
-                                    {{ __('Login') }}
-                                </button>
-                            </div>
-
-                            <div class="text-center">
-                                <a href="{{ url('user-password-recovery') }}" class="">
-                                    {{ __('I forgot my password') }}
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-4 text-center">
-                <h2>{{ __('Register') }}</h2>
-                {% if has_permission_to('register') and config('registration_enabled') %}
-                    <p>{{ __('Please sign up, if you want to help us!') }}</p>
-                    <div class="form-group">
-                        <a href="{{ url('register') }}" class="btn btn-default">{{ __('Register') }} &raquo;</a>
-                    </div>
-                {% else %}
-                    {{ m.alert(__('Registration is disabled.'), 'danger') }}
-                {% endif %}
-            </div>
-
-            <div class="col-sm-4 text-center">
+            <div class="col-sm-6 text-center">
                 <h2>{{ __('OpenID') }}</h2>
-                    <p>{{ __('Log in with your OpenID') }}</p>
+                    <p>{{ __('Mit deinem HPI-Account authentifizieren') }}</p>
                     <div class="form-group">
-                        <a href="{{ url('oidc-start') }}" class="btn btn-default">{{ __('Authenticate') }} &raquo;</a>
+                        <a href="{{ url('oidc-start') }}" class="btn btn-primary">{{ __('Anmelden') }} &raquo;</a>
                     </div>
             </div>
 
-            <div class="col-sm-4 text-center">
-                <h2>{{ __('What can I do?') }}</h2>
-                <p>{{ __('Please read about the jobs you can do to help us.') }}</p>
-                <div class="form-group">
-                    <a href="{{ url('angeltypes', {'action': 'about'}) }}" class="btn btn-default">
-                        {{ __('Teams/Job description') }} &raquo;
-                    </a>
-                </div>
-            </div>
         </div>
 
         {{ m.glyphicon('info-sign') }} {{ __('Please note: You have to activate cookies!') }}
