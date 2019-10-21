@@ -7,7 +7,7 @@ class ShiftCalendarRenderer
     /**
      * 15m * 60s/m = 900s
      */
-    const SECONDS_PER_ROW = 900;
+    const SECONDS_PER_ROW = 600;
 
     /**
      * Height of a block in pixel.
