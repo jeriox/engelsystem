@@ -47,12 +47,12 @@ function update_ShiftsFilter_timerange(ShiftsFilter $shiftsFilter, $days)
 {
     $start_time = $shiftsFilter->getStartTime();
     if (is_null($start_time)) {
-        $start_time = strtotime("2019-10-24 16:00");
+        $start_time = strtotime("2019-12-19 16:00");
     }
 
     $end_time = $shiftsFilter->getEndTime();
     if (is_null($end_time)) {
-        $end_time = strtotime("2019-10-25 12:00");
+        $end_time = strtotime("2019-12-20 12:00");
     }
 
     $shiftsFilter->setStartTime(check_request_datetime(
